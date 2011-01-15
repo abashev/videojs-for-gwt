@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module>
+    <inherits name='com.google.gwt.user.User' />
+
+    <script src="videojs/video.js"/>
+    <stylesheet src="videojs/video-js.css"/>
+</module>
