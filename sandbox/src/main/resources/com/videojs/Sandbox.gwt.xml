@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<module rename-to='sandbox'>
+    <inherits name="com.google.gwt.user.User" />
+    <inherits name="com.google.gwt.i18n.I18N" />
+    <inherits name="com.google.gwt.logging.Logging"/>
+
+    <entry-point class="com.videojs.client.SandboxEntryPoint" />
+</module>
