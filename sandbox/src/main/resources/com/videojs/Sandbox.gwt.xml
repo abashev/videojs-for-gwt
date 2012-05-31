@@ -5,5 +5,7 @@
     <inherits name="com.google.gwt.i18n.I18N" />
     <inherits name="com.google.gwt.logging.Logging"/>
 
+    <inherits name="com.videojs.VideoPlayer" />
+
     <entry-point class="com.videojs.client.SandboxEntryPoint" />
 </module>

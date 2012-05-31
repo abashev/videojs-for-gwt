@@ -14,6 +14,14 @@
     <packaging>war</packaging>
     <description>Sandbox for testing video-js player</description>
 
+    <dependencies>
+        <dependency>
+            <groupId>com.github.video-js-for-gwt</groupId>
+            <artifactId>player</artifactId>
+            <version>${project.version}</version>
+        </dependency>
+    </dependencies>
+
     <build>
         <plugins>
             <plugin>

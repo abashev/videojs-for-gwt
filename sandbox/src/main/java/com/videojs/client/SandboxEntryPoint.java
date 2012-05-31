@@ -13,6 +13,8 @@ public class SandboxEntryPoint implements EntryPoint {
      */
     @Override
     public void onModuleLoad() {
-        RootPanel.get("container").add(new Label("Hello from GWT"));
+        VideoPlayer player = new VideoPlayer();
+
+        RootPanel.get("container").add(player);
     }
 }
