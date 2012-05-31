@@ -1,0 +1,12 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder" xmlns:g="urn:import:com.google.gwt.user.client.ui">
+    <g:HTML>
+        <video id="example_video_1" class="video-js vjs-default-skin"
+            controls="controls" preload="none" width="640" height="264"
+            poster="http://video-js.zencoder.com/oceans-clip.png" data-setup="{}">
+
+            <source src="http://video-js.zencoder.com/oceans-clip.mp4" type='video/mp4' />
+        </video>
+    </g:HTML>
+</ui:UiBinder>
