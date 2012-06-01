@@ -2,7 +2,7 @@
 
 <module>
     <inherits name="com.google.gwt.user.User" />
+    <inherits name="com.google.gwt.resources.Resources" />
 
-    <script src="videojs/video.js"/>
-    <stylesheet src="videojs/video-js.css"/>
+    <script src="videojs/video-3.2.0.min.js"/>
 </module>
