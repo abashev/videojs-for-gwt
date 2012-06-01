@@ -1,14 +1,15 @@
 package com.videojs.client;
 
+import static com.google.gwt.core.client.GWT.getModuleBaseURL;
 import static com.videojs.client.VideoPlayerResources.RESOURCES;
 
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.dom.client.DivElement;
+import java.util.ArrayList;
+import java.util.List;
+
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.MediaElement;
 import com.google.gwt.dom.client.SourceElement;
 import com.google.gwt.dom.client.VideoElement;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Widget;
 
 /**
@@ -18,41 +19,31 @@ import com.google.gwt.user.client.ui.Widget;
  * @version $Id$
  */
 public class VideoPlayer extends Widget {
-    private static final String FALLBACK_SWF = GWT.getModuleBaseURL() + "/videojs/video-js-3.2.0.swf";
+    static final String VERSION = "3.2.0";
 
-    private String playerId;
+    private static final String FALLBACK_SWF = getModuleBaseURL() + "/videojs/video-js-" + VERSION + ".swf";
+    private static final String DEFAULT_PRELOAD = MediaElement.PRELOAD_NONE;
 
-    public VideoPlayer(int width, int height, String source) {
-        RESOURCES.css().ensureInjected();
+    private final int width;
+    private final int height;
 
-        setFlashFallback(FALLBACK_SWF);
+    private String skinName = "vjs-default-skin";
+    private boolean controls = true;
+    private String preload = DEFAULT_PRELOAD;
+    private String poster = null;
 
-        final Document doc = Document.get();
+    private List<String> sources = new ArrayList<String>();
+    private List<String> sourceType = new ArrayList<String>();
 
-        DivElement container = doc.createDivElement();
+    public VideoPlayer(int width, int height) {
+        if (RESOURCES.css().ensureInjected()) {
+            setFlashFallback();
+        }
 
-        setElement(container);
+        this.width = width;
+        this.height = height;
 
-        VideoElement videoElem = doc.createVideoElement();
-
-        videoElem.setId(playerId = doc.createUniqueId());
-        videoElem.addClassName("video-js");
-        videoElem.addClassName("vjs-default-skin");
-        videoElem.setWidth(width);
-        videoElem.setHeight(height);
-        videoElem.setControls(true);
-        videoElem.setPreload(MediaElement.PRELOAD_NONE);
-
-        videoElem.setPoster("http://video-js.zencoder.com/oceans-clip.png");
-
-        SourceElement srcElem = doc.createSourceElement();
-
-        srcElem.setSrc(source);
-        srcElem.setType("video/mp4");
-
-        videoElem.appendChild(srcElem);
-
-        container.appendChild(videoElem);
+        setElement(Document.get().createDivElement());
     }
 
     /* (non-Javadoc)
@@ -60,16 +51,97 @@ public class VideoPlayer extends Widget {
      */
     @Override
     protected void onLoad() {
+        final String playerId = Document.get().createUniqueId();
+
+        VideoElement videoElem = Document.get().createVideoElement();
+
+        videoElem.setId(playerId);
+        videoElem.addClassName("video-js");
+        videoElem.setWidth(width);
+        videoElem.setHeight(height);
+
+        if (skinName != null) {
+            videoElem.addClassName(skinName);
+        }
+
+        videoElem.setControls(controls);
+
+        if (preload != null) {
+            videoElem.setPreload(preload);
+        } else {
+            videoElem.setPreload(DEFAULT_PRELOAD);
+        }
+
+        if (poster != null) {
+            videoElem.setPoster(poster);
+        }
+
+        if ((sources.size() == 0) || (sources.size() != sourceType.size())) {
+            throw new IllegalArgumentException("Wrong number of video sources");
+        }
+
+        for (int i = 0; i < sources.size(); i++) {
+            SourceElement srcElem = Document.get().createSourceElement();
+
+            srcElem.setSrc(sources.get(i));
+            srcElem.setType(sourceType.get(i));
+
+            videoElem.appendChild(srcElem);
+        }
+
+        getElement().appendChild(videoElem);
+
         initPlayer(playerId);
     }
 
-    private native void setFlashFallback(String swfUrl) /*-{
-        $wnd._V_.options.flash.swf = swfUrl;
+    /**
+     * Set skin name.
+     *
+     * @param skinName the skinName to set
+     */
+    public void setSkinName(String skinName) {
+        this.skinName = skinName;
+    }
+
+    /**
+     * Show controls for the player.
+     *
+     * @param controls the controls to set
+     */
+    public void setControls(boolean controls) {
+        this.controls = controls;
+    }
+
+    /**
+     * Set preload type for the player. MediaElement.PRELOAD_NONE by default
+     * @param preload the preload to set
+     */
+    public void setPreload(String preload) {
+        this.preload = preload;
+    }
+
+    /**
+     * Add source for video tag. Type value could be from class VideoElement
+     * @param src
+     * @param type
+     */
+    public void addSource(String src, String type) {
+        sources.add(src);
+        sourceType.add(type);
+    }
+
+    /**
+     * @param poster the poster to set
+     */
+    public void setPoster(String poster) {
+        this.poster = poster;
+    }
+
+    private native void setFlashFallback() /*-{
+        $wnd._V_.options.flash.swf = @com.videojs.client.VideoPlayer::FALLBACK_SWF;
     }-*/;
 
     private native void initPlayer(String videoId) /*-{
-        $wnd._V_(videoId, {}, function() {
-            $wnd.window.alert("Player initialized");
-        });
+        $wnd._V_(videoId, {}, function() {});
     }-*/;
 }

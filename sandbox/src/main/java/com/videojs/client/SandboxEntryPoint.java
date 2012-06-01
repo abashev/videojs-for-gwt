@@ -1,6 +1,7 @@
 package com.videojs.client;
 
 import com.google.gwt.core.client.EntryPoint;
+import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.Button;
@@ -44,7 +45,9 @@ public class SandboxEntryPoint implements EntryPoint {
         showBtn.addClickHandler(new ClickHandler() {
             public void onClick(ClickEvent event) {
                 if (player == null) {
-                    player = new VideoPlayer(854, 480, videoUrl.getValue());
+                    player = new VideoPlayer(854, 480);
+
+                    player.addSource(videoUrl.getValue(), VideoElement.TYPE_MP4);
 
                     panel.add(player);
                 }
