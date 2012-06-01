@@ -2,7 +2,6 @@
 
 <module rename-to='sandbox'>
     <inherits name="com.google.gwt.user.User" />
-    <inherits name="com.google.gwt.i18n.I18N" />
     <inherits name="com.google.gwt.logging.Logging"/>
 
     <inherits name="com.videojs.VideoPlayer" />
