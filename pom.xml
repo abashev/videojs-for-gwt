@@ -4,10 +4,10 @@
 
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.github.video-js-for-gwt</groupId>
+    <groupId>com.github.videojs-for-gwt</groupId>
     <artifactId>parent-project</artifactId>
     <packaging>pom</packaging>
-    <version>3.0.2-SNAPSHOT</version>
+    <version>3.2.0-SNAPSHOT</version>
 
     <dependencies>
         <dependency>
