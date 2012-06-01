@@ -2,7 +2,7 @@
 
 <module>
     <inherits name="com.google.gwt.user.User" />
+    <inherits name="com.google.gwt.resources.Resources" />
 
-    <script src="https://vjs.zencdn.net/c/video.js"/>
-    <stylesheet src="https://vjs.zencdn.net/c/video-js.css"/>
+    <script src="videojs/video-3.2.0.min.js"/>
 </module>
