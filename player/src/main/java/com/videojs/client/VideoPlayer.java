@@ -130,6 +130,81 @@ public class VideoPlayer extends Widget {
     }-*/;
 
     /**
+     * Returns the current time of the video in seconds.
+     * @return
+     */
+    public native int getCurrentTime() /*-{
+        var player = this.@com.videojs.client.VideoPlayer::playerObject;
+
+        if (player) {
+            return player.currentTime();
+        }
+    }-*/;
+
+    /**
+     * Seek to the supplied time (seconds).
+     *
+     * @param position
+     */
+    public native void setCurrentTime(int position) /*-{
+        var player = this.@com.videojs.client.VideoPlayer::playerObject;
+
+        if (player) {
+            player.currentTime(position);
+        }
+    }-*/;
+
+    /**
+     * Fired whenever the media begins or resumes playback.
+     * @param handler
+     */
+    public void addPlayHandler(VideoPlayerHandler handler) {
+        addEventHandler("play", handler);
+    };
+
+    /**
+     * Fired whenever the media has been paused.
+     * @param handler
+     */
+    public void addPauseHandler(VideoPlayerHandler handler) {
+        addEventHandler("pause", handler);
+    };
+
+    /**
+     * Fired when the end of the media resource is reached. currentTime == duration
+     * @param handler
+     */
+    public void addEndedHandler(VideoPlayerHandler handler) {
+        addEventHandler("ended", handler);
+    };
+
+    /**
+     * Fired when the current playback position has changed.
+     * During playback this is fired every 15-250 milliseconds, depending on the playback technology in use.
+     *
+     * @param handler
+     */
+    public void addTimeUpdateHandler(VideoPlayerHandler handler) {
+        addEventHandler("timeupdate", handler);
+    }
+
+    /**
+     * Fired when the user agent begins looking for media data.
+     * @param handler
+     */
+    public void addLoadStartHandler(VideoPlayerHandler handler) {
+        addEventHandler("loadstart", handler);
+    };
+
+    /**
+     * Fired when the player has initial duration and dimension information.
+     * @param handler
+     */
+    public void addLoadedMetadataHandler(VideoPlayerHandler handler) {
+        addEventHandler("loadedmetadata", handler);
+    };
+
+    /**
      * Set skin name.
      *
      * @param skinName the skinName to set
@@ -180,7 +255,14 @@ public class VideoPlayer extends Widget {
         return $wnd._V_(videoId, {}, function() {});
     }-*/;
 
-    private native void play(JavaScriptObject player) /*-{
-        player.play();
+    private native void addEventHandler(String event, VideoPlayerHandler handler) /*-{
+        var player = this.@com.videojs.client.VideoPlayer::playerObject;
+        var javaPlayer = this;
+
+        if (player) {
+            player.addEvent(event, function() {
+                handler.@com.videojs.client.VideoPlayerHandler::handle(Lcom/videojs/client/VideoPlayer;)(javaPlayer);
+            });
+        }
     }-*/;
 }
