@@ -6,6 +6,7 @@ import static com.videojs.client.VideoPlayerResources.RESOURCES;
 import java.util.ArrayList;
 import java.util.List;
 
+import com.google.gwt.core.client.JavaScriptObject;
 import com.google.gwt.dom.client.Document;
 import com.google.gwt.dom.client.MediaElement;
 import com.google.gwt.dom.client.SourceElement;
@@ -34,6 +35,8 @@ public class VideoPlayer extends Widget {
 
     private List<String> sources = new ArrayList<String>();
     private List<String> sourceType = new ArrayList<String>();
+
+    private JavaScriptObject playerObject;
 
     public VideoPlayer(int width, int height) {
         if (RESOURCES.css().ensureInjected()) {
@@ -91,8 +94,40 @@ public class VideoPlayer extends Widget {
 
         getElement().appendChild(videoElem);
 
-        initPlayer(playerId);
+        this.playerObject = initPlayer(playerId);
     }
+
+    /* (non-Javadoc)
+     * @see com.google.gwt.user.client.ui.Widget#onUnload()
+     */
+    @Override
+    protected void onUnload() {
+        super.onUnload();
+
+        this.playerObject = null;
+    }
+
+    /**
+     * Start the video playback.
+     */
+    public native void play()  /*-{
+        var player = this.@com.videojs.client.VideoPlayer::playerObject;
+
+        if (player) {
+            player.play();
+        }
+    }-*/;
+
+    /**
+     * Pause the video playback.
+     */
+    public native void pause() /*-{
+        var player = this.@com.videojs.client.VideoPlayer::playerObject;
+
+        if (player) {
+            player.pause();
+        }
+    }-*/;
 
     /**
      * Set skin name.
@@ -141,7 +176,11 @@ public class VideoPlayer extends Widget {
         $wnd._V_.options.flash.swf = @com.videojs.client.VideoPlayer::FALLBACK_SWF;
     }-*/;
 
-    private native void initPlayer(String videoId) /*-{
-        $wnd._V_(videoId, {}, function() {});
+    private native JavaScriptObject initPlayer(String videoId) /*-{
+        return $wnd._V_(videoId, {}, function() {});
+    }-*/;
+
+    private native void play(JavaScriptObject player) /*-{
+        player.play();
     }-*/;
 }
