@@ -76,7 +76,14 @@ public class SandboxEntryPoint implements EntryPoint {
 
                     panel.add(currentPosition);
 
+
                     player.addLoadedMetadataHandler(new VideoPlayerHandler() {
+                        public void handle(VideoPlayer player) {
+                            player.rewind(15);
+                        }
+                    });
+
+                    player.addLoadedDataHandler(new VideoPlayerHandler() {
                         public void handle(VideoPlayer player) {
                             player.rewind(15);
                         }
@@ -103,6 +110,18 @@ public class SandboxEntryPoint implements EntryPoint {
                             currentStatus.setText("Player ended");
                         }
                     });
+
+                    final TextBox position = new TextBox();
+
+                    Button setPositionBtn = new Button("Jump", new ClickHandler() {
+                        public void onClick(ClickEvent event) {
+                            player.setCurrentTime(Integer.valueOf(position.getValue()));
+                            //                            player.rewind(Integer.valueOf(position.getValue()));
+                        }
+                    });
+
+                    panel.add(position);
+                    panel.add(setPositionBtn);
                 }
             }
         });

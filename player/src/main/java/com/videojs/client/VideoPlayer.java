@@ -215,6 +215,22 @@ public class VideoPlayer extends Widget {
     };
 
     /**
+     * Fired when the player has downloaded data at the current playback position.
+     * @param handler
+     */
+    public void addLoadedDataHandler(VideoPlayerHandler handler) {
+        addEventHandler("loadeddata", handler);
+    }
+
+    /**
+     * Fired when the player has finished downloading the source data.
+     * @param handler
+     */
+    public void addLoadedAllDataHandler(VideoPlayerHandler handler) {
+        addEventHandler("loadedalldata", handler);
+    }
+
+    /**
      * Set skin name.
      *
      * @param skinName the skinName to set
