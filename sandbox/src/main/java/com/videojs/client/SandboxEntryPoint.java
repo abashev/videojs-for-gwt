@@ -78,9 +78,7 @@ public class SandboxEntryPoint implements EntryPoint {
 
                     player.addLoadedMetadataHandler(new VideoPlayerHandler() {
                         public void handle(VideoPlayer player) {
-                            player.pause();
-                            player.setCurrentTime(10);
-                            player.play();
+                            player.rewind(15);
                         }
                     });
 

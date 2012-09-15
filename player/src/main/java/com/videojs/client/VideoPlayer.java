@@ -133,7 +133,7 @@ public class VideoPlayer extends Widget {
      * Returns the current time of the video in seconds.
      * @return
      */
-    public native int getCurrentTime() /*-{
+    public native float getCurrentTime() /*-{
         var player = this.@com.videojs.client.VideoPlayer::playerObject;
 
         if (player) {
@@ -146,13 +146,23 @@ public class VideoPlayer extends Widget {
      *
      * @param position
      */
-    public native void setCurrentTime(int position) /*-{
+    public native void setCurrentTime(float position) /*-{
         var player = this.@com.videojs.client.VideoPlayer::playerObject;
 
         if (player) {
             player.currentTime(position);
         }
     }-*/;
+
+    /**
+     * Rewind video to specified position because setCurrentTime is not enough.
+     * @param position
+     */
+    public void rewind(int position) {
+        pause();
+        setCurrentTime(position);
+        play();
+    }
 
     /**
      * Fired whenever the media begins or resumes playback.
