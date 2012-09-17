@@ -32,10 +32,12 @@ public class VideoPlayer extends Widget {
     private boolean controls = true;
     private String preload = DEFAULT_PRELOAD;
     private String poster = null;
+    private int startPosition = 0;
 
     private List<String> sources = new ArrayList<String>();
     private List<String> sourceType = new ArrayList<String>();
 
+    private String playerId;
     private JavaScriptObject playerObject;
 
     public VideoPlayer(int width, int height) {
@@ -54,7 +56,7 @@ public class VideoPlayer extends Widget {
      */
     @Override
     protected void onLoad() {
-        final String playerId = Document.get().createUniqueId();
+        playerId = Document.get().createUniqueId();
 
         VideoElement videoElem = Document.get().createVideoElement();
 
@@ -94,7 +96,13 @@ public class VideoPlayer extends Widget {
 
         getElement().appendChild(videoElem);
 
-        this.playerObject = initPlayer(playerId);
+        this.playerObject = initPlayer();
+
+//        if ((startPosition != 0)) { // Because of lack in progressive download for flash
+        if (!isFlashFallback() && (startPosition != 0)) { // Because of lack in progressive download for flash
+            addLoadedMetadataHandler(new OneTimeSeekVideoHandler());
+            addLoadedDataHandler(new OneTimeSeekVideoHandler());
+        }
     }
 
     /* (non-Javadoc)
@@ -155,13 +163,20 @@ public class VideoPlayer extends Widget {
     }-*/;
 
     /**
-     * Rewind video to specified position because setCurrentTime is not enough.
-     * @param position
+     * Check are we using flash fallback for current video.
+     * @return
      */
-    public void rewind(int position) {
-        pause();
-        setCurrentTime(position);
-        play();
+    public native boolean isFlashFallback() /*-{
+        var objects = $wnd.document.getElementById(this.@com.videojs.client.VideoPlayer::playerId).getElementsByTagName('object');
+
+        return ((objects != null) && (objects.length != 0));
+    }-*/;
+
+    /**
+     * @param startPosition the startPosition to set
+     */
+    public void setStartPosition(int startPosition) {
+        this.startPosition = startPosition;
     }
 
     /**
@@ -277,8 +292,8 @@ public class VideoPlayer extends Widget {
         $wnd._V_.options.flash.swf = @com.videojs.client.VideoPlayer::FALLBACK_SWF;
     }-*/;
 
-    private native JavaScriptObject initPlayer(String videoId) /*-{
-        return $wnd._V_(videoId, {}, function() {});
+    private native JavaScriptObject initPlayer() /*-{
+        return $wnd._V_(this.@com.videojs.client.VideoPlayer::playerId, {}, function() {});
     }-*/;
 
     private native void addEventHandler(String event, VideoPlayerHandler handler) /*-{
@@ -291,4 +306,37 @@ public class VideoPlayer extends Widget {
             });
         }
     }-*/;
+
+    /**
+     * Hack for hiding spinner after changing currentTime()
+     */
+    private native void hideSpinner() /*-{
+        var css = '.vjs-loading-spinner { display: none !important; }',
+        head = $wnd.document.getElementsByTagName('head')[0],
+        style = $wnd.document.createElement('style');
+
+        style.type = 'text/css';
+
+        if (style.styleSheet) {
+            style.styleSheet.cssText = css;
+        } else {
+            style.appendChild(document.createTextNode(css));
+        }
+
+        head.appendChild(style);
+    }-*/;
+
+    private class OneTimeSeekVideoHandler implements VideoPlayerHandler {
+        private boolean executed = false;
+
+        @Override
+        public void handle(VideoPlayer player) {
+            if (!executed) {
+                player.setCurrentTime(startPosition);
+                hideSpinner(); // Hack for videojs with spinner after seeking
+
+                executed = true;
+            }
+        }
+    }
 }

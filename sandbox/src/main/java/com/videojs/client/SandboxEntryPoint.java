@@ -1,5 +1,7 @@
 package com.videojs.client;
 
+import java.util.logging.Logger;
+
 import com.google.gwt.core.client.EntryPoint;
 import com.google.gwt.dom.client.VideoElement;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -15,6 +17,7 @@ import com.google.gwt.user.client.ui.VerticalPanel;
  */
 public class SandboxEntryPoint implements EntryPoint {
     private VideoPlayer player;
+    private final Logger log = Logger.getLogger(SandboxEntryPoint.class.getName());
 
     /* (non-Javadoc)
      * @see com.google.gwt.core.client.EntryPoint#onModuleLoad()
@@ -51,6 +54,7 @@ public class SandboxEntryPoint implements EntryPoint {
                     player = new VideoPlayer(854, 480);
 
                     player.addSource(videoUrl.getValue(), VideoElement.TYPE_MP4);
+                    player.setStartPosition(300);
 
                     panel.add(player);
 
@@ -76,18 +80,41 @@ public class SandboxEntryPoint implements EntryPoint {
 
                     panel.add(currentPosition);
 
-
-                    player.addLoadedMetadataHandler(new VideoPlayerHandler() {
-                        public void handle(VideoPlayer player) {
-                            player.rewind(15);
-                        }
-                    });
-
-                    player.addLoadedDataHandler(new VideoPlayerHandler() {
-                        public void handle(VideoPlayer player) {
-                            player.rewind(15);
-                        }
-                    });
+//                    player.addPlayHandler(new VideoPlayerHandler() {
+//                        public void handle(VideoPlayer player) {
+//                            log.info("OnPlay handler");
+//
+//                            player.setCurrentTime(20);
+//                        }
+//                    });
+//
+//                    player.addLoadedMetadataHandler(new VideoPlayerHandler() {
+//                        boolean executed = false;
+//
+//                        public void handle(VideoPlayer player) {
+//                            if (!executed) {
+//                                log.info("loadedmetadata handler");
+//
+//                                player.setCurrentTime(200);
+//
+//                                executed = true;
+//                            }
+//                        }
+//                    });
+//
+//                    player.addLoadedDataHandler(new VideoPlayerHandler() {
+//                        boolean executed = false;
+//
+//                        public void handle(VideoPlayer player) {
+//                            if (!executed) {
+//                                log.info("loadeddata handler");
+//
+//                                player.setCurrentTime(200);
+//
+//                                executed = true;
+//                            }
+//                        }
+//                    });
 
                     final Label currentStatus = new Label("No status");
 
