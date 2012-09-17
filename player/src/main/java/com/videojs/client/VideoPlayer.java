@@ -98,10 +98,14 @@ public class VideoPlayer extends Widget {
 
         this.playerObject = initPlayer();
 
-//        if ((startPosition != 0)) { // Because of lack in progressive download for flash
-        if (!isFlashFallback() && (startPosition != 0)) { // Because of lack in progressive download for flash
-            addLoadedMetadataHandler(new OneTimeSeekVideoHandler());
-            addLoadedDataHandler(new OneTimeSeekVideoHandler());
+        if ((startPosition != 0) && !isFlashFallback()) { // Because of lack in progressive download for flash
+            addDurationChangeHandler(new VideoPlayerHandler() {
+                public void handle(VideoPlayer player) {
+                    player.pause();
+                    player.setCurrentTime(startPosition);
+                    player.play();
+                }
+            });
         }
     }
 
@@ -246,6 +250,14 @@ public class VideoPlayer extends Widget {
     }
 
     /**
+     * Fired when the duration of the media resource is changed, or known for the first time.
+     * @param handler
+     */
+    public void addDurationChangeHandler(VideoPlayerHandler handler) {
+        addEventHandler("durationchange", handler);
+    }
+
+    /**
      * Set skin name.
      *
      * @param skinName the skinName to set
@@ -306,37 +318,4 @@ public class VideoPlayer extends Widget {
             });
         }
     }-*/;
-
-    /**
-     * Hack for hiding spinner after changing currentTime()
-     */
-    private native void hideSpinner() /*-{
-        var css = '.vjs-loading-spinner { display: none !important; }',
-        head = $wnd.document.getElementsByTagName('head')[0],
-        style = $wnd.document.createElement('style');
-
-        style.type = 'text/css';
-
-        if (style.styleSheet) {
-            style.styleSheet.cssText = css;
-        } else {
-            style.appendChild(document.createTextNode(css));
-        }
-
-        head.appendChild(style);
-    }-*/;
-
-    private class OneTimeSeekVideoHandler implements VideoPlayerHandler {
-        private boolean executed = false;
-
-        @Override
-        public void handle(VideoPlayer player) {
-            if (!executed) {
-                player.setCurrentTime(startPosition);
-                hideSpinner(); // Hack for videojs with spinner after seeking
-
-                executed = true;
-            }
-        }
-    }
 }

@@ -54,7 +54,7 @@ public class SandboxEntryPoint implements EntryPoint {
                     player = new VideoPlayer(854, 480);
 
                     player.addSource(videoUrl.getValue(), VideoElement.TYPE_MP4);
-                    player.setStartPosition(300);
+                    player.setStartPosition(20);
 
                     panel.add(player);
 
@@ -80,11 +80,29 @@ public class SandboxEntryPoint implements EntryPoint {
 
                     panel.add(currentPosition);
 
-//                    player.addPlayHandler(new VideoPlayerHandler() {
+//                    player.addDurationChangeHandler(new VideoPlayerHandler() {
 //                        public void handle(VideoPlayer player) {
-//                            log.info("OnPlay handler");
-//
+//                            player.pause();
 //                            player.setCurrentTime(20);
+//                            player.play();
+//                        }
+//                    });
+
+//                    player.addPlayHandler(new VideoPlayerHandler() {
+//                        int counter = 0;
+//
+//                        public void handle(VideoPlayer player) {
+//                            if (counter < 5) {
+//                                log.info("onPlay");
+//
+//                                player.setCurrentTime(20);
+
+//                                counter++;
+//
+//                                player.pause();
+//                                player.setCurrentTime(20);
+//                                player.play();
+//                            }
 //                        }
 //                    });
 //
@@ -104,14 +122,20 @@ public class SandboxEntryPoint implements EntryPoint {
 //
 //                    player.addLoadedDataHandler(new VideoPlayerHandler() {
 //                        boolean executed = false;
-//
+
 //                        public void handle(VideoPlayer player) {
+//                            log.info("loadeddata handler");
+//
+//                            player.setCurrentTime(20);
+
+
 //                            if (!executed) {
+//                                executed = true;
+//
 //                                log.info("loadeddata handler");
 //
-//                                player.setCurrentTime(200);
-//
-//                                executed = true;
+//                                player.setCurrentTime(20);
+//                                player.play();
 //                            }
 //                        }
 //                    });
@@ -132,11 +156,11 @@ public class SandboxEntryPoint implements EntryPoint {
                         }
                     });
 
-                    player.addEndedHandler(new VideoPlayerHandler() {
-                        public void handle(VideoPlayer player) {
-                            currentStatus.setText("Player ended");
-                        }
-                    });
+//                    player.addEndedHandler(new VideoPlayerHandler() {
+//                        public void handle(VideoPlayer player) {
+//                            currentStatus.setText("Player ended");
+//                        }
+//                    });
 
                     final TextBox position = new TextBox();
 
