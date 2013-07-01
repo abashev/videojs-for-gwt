@@ -10,7 +10,18 @@ How to use it
 
 First of all you need to add videojs-for-gwt into your project.
 
-Repository - TBD
+Repository
+
+    <repositories>
+        <repository>
+            <id>videojs-for-gwt.repository</id>
+            <name>Repository for videojs-for-gwt artifacts</name>
+            <url>http://dl.bintray.com/abashev/videojs-for-gwt</url>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+        </repository>
+    </repositories>
 
 Maven dependency:
 
@@ -18,7 +29,7 @@ Maven dependency:
         <dependency>
             <groupId>com.github.videojs-for-gwt</groupId>
             <artifactId>player</artifactId>
-            <version>3.2.0-SNAPSHOT</version>
+            <version>3.2.0</version>
         </dependency>
     </dependencies>
 

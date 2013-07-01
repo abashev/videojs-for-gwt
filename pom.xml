@@ -7,7 +7,7 @@
     <groupId>com.github.videojs-for-gwt</groupId>
     <artifactId>parent-project</artifactId>
     <packaging>pom</packaging>
-    <version>3.2.0-SNAPSHOT</version>
+    <version>3.2.0</version>
 
     <dependencies>
         <dependency>
@@ -51,6 +51,14 @@
             </resource>
         </resources>
     </build>
+
+    <distributionManagement>
+        <repository>
+            <id>bintray-abashev</id>
+            <name>abashev-videojs-for-gwt-videojs-for-gwt</name>
+            <url>https://api.bintray.com/maven/abashev/videojs-for-gwt/videojs-for-gwt</url>
+        </repository>
+    </distributionManagement>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
